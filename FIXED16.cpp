@@ -20,13 +20,13 @@
 #define TRUE 1
 #define FALSE 0
 
-//constants do not copy in GBDK
+//constants (32bits) do not copy in GBDK
 const int intMultiplier = 10000; //update along with lowbits
 
 //constants (32bits)
 const int signMaskInt32 = 0x80000000;
 
-//constants (32bits)
+//constants (16bits)
 typedef INT16 fixed16;
 const short fullBits = 16;
 const char lowBits = 4; //update to change calculations
