@@ -31,16 +31,6 @@ fixed16 absF16(fixed16 x)
     return 0 - x;
 }
 
-fixed16 addF16(fixed16 x, fixed16 add)
-{
-    return x + add;
-}
-
-fixed16 subF16(fixed16 x, fixed16 sub)
-{
-    return x - sub;
-}
-
 fixed16 mulF16(fixed16 x, fixed16 mul)
 {
     if (mul == 0 || x == 0) return 0;
@@ -81,9 +71,9 @@ fixed16 sinF16(fixed16 x) {
     int k = 1;
 
     while (addF16(res, term) != res) {
-        res = addF16(res, term);
+        res += term;
         // term = (term) -x^x / k * (k-1)
-        k = k + 2;
+        k += 2;
         term = mulF16(term, -x);
         term = mulF16(term, x);
         term = divF16(term, INT16TOF16(k));
@@ -99,9 +89,9 @@ fixed16 cosF16(fixed16 x) {
     int k = 0;
 
     while (addF16(res, term) != res) {
-        res = addF16(res, term);
+        res += term;
         // term = -(term) x^x / k * (k-1)
-        k = k + 2;
+        k += 2;
         term = mulF16(term, -0x10);
         term = mulF16(term, x);
         term = mulF16(term, x);
