@@ -18,5 +18,8 @@
     <ClCompile Include="FIXED16.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="fixed16.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

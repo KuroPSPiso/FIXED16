@@ -202,6 +202,7 @@ fixed16 sinF16(fixed16 x) {
 
     while (addF16(res, term) != res) {
         res = addF16(res, term);
+        // term = (term) -x^x / k * (k-1)
         k = k + 2;
         term = mulF16(term, -x);
         term = mulF16(term, x);
