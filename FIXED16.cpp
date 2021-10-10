@@ -203,7 +203,6 @@ fixed16 sinF16(fixed16 x) {
     while (addF16(res, term) != res) {
         res = addF16(res, term);
         k = k + 2;
-        //term = divF16(divF16(mulF16(mulF16(term, -x), x), k), INT16TOF16(k - 1));
         term = mulF16(term, -x);
         term = mulF16(term, x);
         term = divF16(term, INT16TOF16(k));
@@ -214,8 +213,25 @@ fixed16 sinF16(fixed16 x) {
     return res;
 }
 
+fixed16 cosF16(fixed16 x) {
+    fixed16 res = 0;
+    fixed16 term = 0x10;
+    int k = 0;
 
+    while (addF16(res, term) != res) {
+        res = addF16(res, term);
+        // term = -(term) x^2 / k * (k-1)
+        k = k + 2;
+        term = mulF16(term, -0x10);
+        term = mulF16(term, x);
+        term = mulF16(term, x);
+        term = divF16(term, INT16TOF16(k));
+        term = divF16(term, INT16TOF16(k - 1));
+        printf("%d, %d, %d\n", f16ToInt(res), k, f16ToInt(term));
+    }
 
+    return res;
+}
 
 void fixed16_12Dot4();
 
@@ -397,10 +413,25 @@ void fixed16_12Dot4()
     printf("SIN %d\n", a1);
     printf("I32Conv: %12d, F16: %04X, sign: %1X, base: %4X, frac: %1X\n\n", f16ToInt(f1), f1 & 0xFFFF, SIGNISSET(f1), BASEF16(f1), FRACTIONF16(f1));
 
-    return;
-
     //cos
     printf("-----------[COS]-----------\n");
+    a1 = 10000;
+    f1 = cosF16(intToF16(a1));
+    printf("SIN %d\n", a1);
+    printf("I32Conv: %12d, F16: %04X, sign: %1X, base: %4X, frac: %1X\n\n", f16ToInt(f1), f1 & 0xFFFF, SIGNISSET(f1), BASEF16(f1), FRACTIONF16(f1));
+    a1 = 5000;
+    f1 = cosF16(intToF16(a1));
+    printf("SIN %d\n", a1);
+    printf("I32Conv: %12d, F16: %04X, sign: %1X, base: %4X, frac: %1X\n\n", f16ToInt(f1), f1 & 0xFFFF, SIGNISSET(f1), BASEF16(f1), FRACTIONF16(f1));
+    a1 = 20000;
+    f1 = cosF16(intToF16(a1));
+    printf("SIN %d\n", a1);
+    printf("I32Conv: %12d, F16: %04X, sign: %1X, base: %4X, frac: %1X\n\n", f16ToInt(f1), f1 & 0xFFFF, SIGNISSET(f1), BASEF16(f1), FRACTIONF16(f1));
+    a1 = -5000;
+    f1 = cosF16(intToF16(a1));
+    printf("SIN %d\n", a1);
+    printf("I32Conv: %12d, F16: %04X, sign: %1X, base: %4X, frac: %1X\n\n", f16ToInt(f1), f1 & 0xFFFF, SIGNISSET(f1), BASEF16(f1), FRACTIONF16(f1));
+
 
     //pi
     printf("-----------[RAND]-----------\n");
