@@ -21,5 +21,8 @@
     <ClCompile Include="fixed16.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="fixed16_min.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

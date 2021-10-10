@@ -141,6 +141,7 @@
   <ItemGroup>
     <ClCompile Include="fixed16.c" />
     <ClCompile Include="FIXED16.cpp" />
+    <ClCompile Include="fixed16_min.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
