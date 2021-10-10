@@ -2,7 +2,7 @@
 * fixed12 range of (-2047 to 2047)[12bits] and precision of (0.0625 - 0.9375)[4bits]
 * v5
 * lnk: https://bogaardryan.com
-* src: https://github.com/KuroPSPiso/?
+* src: https://github.com/KuroPSPiso/FIXED16
 */
 
 #define DoubleToFixed(x) (x*(double)(1<<4))
@@ -182,7 +182,17 @@ fixed16 intToF16(int x)
     }
 }
 
+
+void fixed16_12Dot4();
+
 int main()
+{
+    fixed16_12Dot4();
+
+    return 0;
+}
+
+void fixed16_12Dot4()
 {
     fixed16 f1;
 
@@ -324,17 +334,17 @@ int main()
     printf("I32Conv: %12d, F16: %04X, sign: %1X, base: %4X, frac: %1X\n\n", f16ToInt(f1), f1 & 0xFFFF, SIGNISSET(f1), BASEF16(f1), FRACTIONF16(f1));
 
     //pi
+    printf("-----------[RAND]-----------\n");
     a1 = 31416;
     f1 = intToF16(a1);
-    printf("pi = %d\n", a1);
+    printf("PI = %d\n", a1);
     printf("I32Conv: %12d, F16: %04X, sign: %1X, base: %4X, frac: %1X\n\n", f16ToInt(f1), f1 & 0xFFFF, SIGNISSET(f1), BASEF16(f1), FRACTIONF16(f1));
 
     fixed16 f2;
     f2 = floorF16(f1);
-    printf("FLOOR : I32Conv: %12d, F16: %04X, sign: %1X, base: %4X, frac: %1X\n\n", f16ToInt(f2), f2 & 0xFFFF, SIGNISSET(f2), BASEF16(f2), FRACTIONF16(f2));
+    printf("FLOOR PI\n");
+    printf("I32Conv: %12d, F16: %04X, sign: %1X, base: %4X, frac: %1X\n\n", f16ToInt(f2), f2 & 0xFFFF, SIGNISSET(f2), BASEF16(f2), FRACTIONF16(f2));
     f2 = ceilF16(f1);
-    printf("CEIL : I32Conv: %12d, F16: %04X, sign: %1X, base: %4X, frac: %1X\n\n", f16ToInt(f2), f2 & 0xFFFF, SIGNISSET(f2), BASEF16(f2), FRACTIONF16(f2));
-
-
-    return 0;
+    printf("CEIL PI\n");
+    printf("I32Conv: %12d, F16: %04X, sign: %1X, base: %4X, frac: %1X\n\n", f16ToInt(f2), f2 & 0xFFFF, SIGNISSET(f2), BASEF16(f2), FRACTIONF16(f2));
 }
