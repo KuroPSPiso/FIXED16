@@ -1,7 +1,3 @@
-#define BOOL unsigned char
-#define TRUE 1
-#define FALSE 0
-
 #define FULLBITS 16
 #define LOWBITS 4
 #define HIGHBITS (FULLBITS - LOWBITS)
