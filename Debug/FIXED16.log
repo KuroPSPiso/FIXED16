@@ -1,0 +1,11 @@
+﻿  FIXED16.cpp
+C:\Users\bogaa\source\repos\FIXED16\FIXED16.cpp(32,29): warning C4309: 'initializing': truncation of constant value
+C:\Users\bogaa\source\repos\FIXED16\FIXED16.cpp(34,29): warning C4309: 'initializing': truncation of constant value
+C:\Users\bogaa\source\repos\FIXED16\FIXED16.cpp(187,10): warning C4244: '=': conversion from 'double' to 'fixed16', possible loss of data
+C:\Users\bogaa\source\repos\FIXED16\FIXED16.cpp(189,10): warning C4244: '=': conversion from 'double' to 'fixed16', possible loss of data
+C:\Users\bogaa\source\repos\FIXED16\FIXED16.cpp(191,10): warning C4244: '=': conversion from 'double' to 'fixed16', possible loss of data
+C:\Users\bogaa\source\repos\FIXED16\FIXED16.cpp(193,10): warning C4244: '=': conversion from 'double' to 'fixed16', possible loss of data
+C:\Users\bogaa\source\repos\FIXED16\FIXED16.cpp(195,10): warning C4244: '=': conversion from 'double' to 'fixed16', possible loss of data
+C:\Users\bogaa\source\repos\FIXED16\FIXED16.cpp(197,10): warning C4244: '=': conversion from 'double' to 'fixed16', possible loss of data
+C:\Users\bogaa\source\repos\FIXED16\FIXED16.cpp(199,10): warning C4244: '=': conversion from 'double' to 'fixed16', possible loss of data
+  FIXED16.vcxproj -> C:\Users\bogaa\source\repos\FIXED16\Debug\FIXED16.exe

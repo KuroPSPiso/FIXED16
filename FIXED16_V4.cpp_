@@ -1,0 +1,261 @@
+/*
+* fixed12 range of (-2047 to 2047)[12bits] and precision of (0.0625 - 0.9375)[4bits]
+* v4
+*/
+
+#define DoubleToFixed(x) (x*(double)(1<<4))
+#define FixedToDouble(x) ((double)x/ (double)(1<<4))
+
+#include <iostream>
+#include <stdint.h>
+
+#define UINT8 uint8_t
+#define UINT16 uint16_t
+
+#define INT16 signed short
+#define BOOL unsigned char
+#define TRUE 1
+#define FALSE 0
+
+//constants (32bits)
+typedef INT16 fixed16;
+const int signMaskInt32 = 0x80000000;
+const fixed16 fractionMaskF16 = 0xFFFF >> 12;
+const fixed16 signMaskF16 = 0x8000;
+const fixed16 baseMaskF16 = (-1 ^ fractionMaskF16) - signMaskF16;
+
+//define macros
+#define SIGNISSET(x) (x < 0)
+#define SIGNINT32(x) (x & signMaskInt32)
+//#define BASEINT32(x) (x / 10000)
+//#define FRACTIONINT32(x) (x - (BASEINT32(x)*10000))
+#define SIGNF16(x) (x & signMaskF16)
+#define BASEF16(x) (x & baseMaskF16)
+#define FRACTIONF16(x) (x & fractionMaskF16)
+/*#define FRACTIONF16TOINT(x) (\
+                                (((x & (0x1 >> 0))>0)? 0625 : 0) +\
+                                (((x & (0x1 >> 1))>0)? 1250 : 0) +\
+                                (((x & (0x1 >> 2))>0)? 2500 : 0) +\
+                                (((x & (0x1 >> 3))>0)? 5000 : 0)\
+                            )*/
+#define BASEF16TOINT(x) ((BASEF16(x) >> 4) * 10000)
+
+//fixed16 operators
+fixed16 absF16(fixed16 x)
+{
+    //(for reserved 0x800?)
+    if (SIGNISSET(x) && (x & 0x7FF0) == 0)
+    {
+        x &= ~(0x8000); //unset sign
+        return x;
+    }
+    return ((SIGNISSET(x) > 0) ? (0x10000 - (x & 0xFFFFFFF0)) + (x & 0x0000000F) : x);
+}
+
+fixed16 addF16(fixed16 x, fixed16 add)
+{
+    if (add == 0) return x;
+    if (x == 0) return add;
+    if(x > 0 && add > 0) return x + add;
+    fixed16 ret = 0x0000;
+
+    if (SIGNISSET(x) && SIGNISSET(add))
+    {
+        if ((x & 0x7FF0) == 0 && (add & 0x7FF0) == 0)
+        {
+            UINT8 fraction = x & 0x000F;
+            fraction += add & 0x000F;
+            ret = ((fraction & 0xF0) == 0) ? 0x8000 : 0 - (fraction & 0xF0);
+            ret += fraction & 0x0F;
+        }
+        else
+        {
+            ret = 0 - (absF16(x) + absF16(add));
+        }
+    }
+    else
+    {
+        UINT8 fraction = x & 0x000F;
+        fraction -= add & 0x000F;
+        
+        ret = (x & 0xFFF0) + (add & 0xFFF0);
+        ret += fraction;
+    }
+    
+    return ret;
+}
+
+fixed16 subF16(fixed16 x, fixed16 sub)
+{
+    sub = SIGNISSET(sub) ? absF16(sub) : 0 - sub;
+
+    printf("\n\tSUB: %X\n",sub);
+
+    return addF16(x, sub);
+}
+
+fixed16 divF16(fixed16 x, fixed16 div)
+{
+    return ((x >> 4) / div);
+}
+
+fixed16 mulF16(fixed16 x, fixed16 mul)
+{
+    return 0;
+}
+
+int f16ToInt(fixed16 x)
+{
+    if (x == 0x0000) return 0;
+    int ret = 0x00000000;
+
+    //base is negative
+    if (x < 0)
+    {
+        //set base
+        ret = x >> 4;
+        if ((x & 0x7FF0) == 0) ret = 0x00000000; //800? is reserved
+        ret *= 10000;
+
+
+        x &= 0x000f;
+        if ((x & 0x0001) > 0) ret -= 625;
+        if ((x & 0x0002) > 0) ret -= 1250;
+        if ((x & 0x0004) > 0) ret -= 2500;
+        if ((x & 0x0008) > 0) ret -= 5000;
+        //ret -= FRACTIONF16TOINT(x);
+    }
+    else
+    {
+        //set base
+        ret += BASEF16TOINT(x);
+
+        x &= 0x000f;
+        if ((x & 0x0001) > 0) ret +=  625;
+        if ((x & 0x0002) > 0) ret += 1250;
+        if ((x & 0x0004) > 0) ret += 2500;
+        if ((x & 0x0008) > 0) ret += 5000;
+
+        //ret += FRACTIONF16TOINT(x);
+    }
+
+    return ret;
+}
+
+fixed16 intToF16(int x)
+{
+    if (x == 0x00000000) return 0;
+    fixed16 ret = 0x0000;
+    INT16 fractionBase10;
+
+    //base is negative
+    if (x < 0)
+    {
+        ret = signMaskF16;
+        //set fraction value
+        fractionBase10 = x - ((x / 10000) * 10000);
+        fractionBase10 *= -1;
+    }
+    else
+    {
+        //set fraction value
+        fractionBase10 = x - ((x / 10000) * 10000);
+    }
+    //set base bits
+    ret += ((x / 10000) << 4) & 0x7FF0;
+
+    //set fraction bits
+    
+    if (fractionBase10 / 5000 > 0)
+    {
+        fractionBase10 -= 5000;
+        ret |= 0x1 << 3;
+    }
+    if (fractionBase10 / 2500 > 0)
+    {
+        fractionBase10 -= 2500;
+        ret |= 0x1 << 2;
+    }
+    if (fractionBase10 / 1250 > 0)
+    {
+        fractionBase10 -= 1250;
+        ret |= 0x1 << 1;
+    }
+    if (fractionBase10 / 0625 > 0)
+    {
+        fractionBase10 -= 0625;
+        ret |= 0x1 << 0;
+    }
+
+    return ret;
+}
+
+template<typename T, unsigned int bits, unsigned int frac>
+class FixedPoint {
+public:
+    constexpr FixedPoint(int x = 0) : raw_(x << frac) { }
+    constexpr FixedPoint(double x) : raw_(x* (T(1) << frac)) { }
+private:
+    T raw_;
+};
+
+int main()
+{
+    fixed16 f1;
+
+    f1 = DoubleToFixed(-1.95);
+    printf("%X", f1);
+
+    return 0;
+    //SET TEST
+    printf("-----------[SET]-----------\n");
+    f1 = intToF16(00000);   //0.0000
+    printf("I32Conv: %12d, F16: %04X, sign: %1X, base: %4X, frac: %1X\n\n", f16ToInt(f1), f1 & 0xFFFF, SIGNISSET(f1), BASEF16(f1), FRACTIONF16(f1));
+    f1 = intToF16(-5000);           //-0.5
+    printf("I32Conv: %12d, F16: %04X, sign: %1X, base: %4X, frac: %1X\n\n", f16ToInt(f1), f1 & 0xFFFF, SIGNISSET(f1), BASEF16(f1), FRACTIONF16(f1));
+    f1 = intToF16(-15000);          //-1.5
+    printf("I32Conv: %12d, F16: %04X, sign: %1X, base: %4X, frac: %1X\n\n", f16ToInt(f1), f1 & 0xFFFF, SIGNISSET(f1), BASEF16(f1), FRACTIONF16(f1));
+    f1 = intToF16(5000);            //0.5
+    printf("I32Conv: %12d, F16: %04X, sign: %1X, base: %4X, frac: %1X\n\n", f16ToInt(f1), f1 & 0xFFFF, SIGNISSET(f1), BASEF16(f1), FRACTIONF16(f1));
+    f1 = intToF16(15650);           //1.5625
+    printf("I32Conv: %12d, F16: %04X, sign: %1X, base: %4X, frac: %1X\n\n", f16ToInt(f1), f1 & 0xFFFF, SIGNISSET(f1), BASEF16(f1), FRACTIONF16(f1));
+
+    //abs
+    printf("-----------[ABS]-----------\n");
+    f1 = absF16(intToF16(-5000)); //-0.5 -> 0.5
+    printf("I32Conv: %12d, F16: %04X, sign: %1X, base: %4X, frac: %1X\n\n", f16ToInt(f1), f1 & 0xFFFF, SIGNISSET(f1), BASEF16(f1), FRACTIONF16(f1));
+    f1 = absF16(intToF16(-49999)); //-4.9375 -> 4.9375
+    printf("I32Conv: %12d, F16: %04X, sign: %1X, base: %4X, frac: %1X\n\n", f16ToInt(f1), f1 & 0xFFFF, SIGNISSET(f1), BASEF16(f1), FRACTIONF16(f1));
+
+    //add
+    printf("-----------[ADD]-----------\n");
+    int a1, a2;
+    a1 = 15000; //1.5
+    a2 = 28938; //2.875
+    f1 = addF16(intToF16(a1), intToF16(a2)); //4.375
+    printf("%d + %d\n", a1, a2);
+    printf("I32Conv: %12d, F16: %04X, sign: %1X, base: %4X, frac: %1X\n\n", f16ToInt(f1), f1 & 0xFFFF, SIGNISSET(f1), BASEF16(f1), FRACTIONF16(f1));
+    //add minus
+    a1 = 7500;
+    a2 = -7500;
+    f1 = addF16(intToF16(a1), intToF16(a2));
+    printf("%d + %d\n", a1, a2);
+    printf("I32Conv: %12d, F16: %04X, sign: %1X, base: %4X, frac: %1X\n\n", f16ToInt(f1), f1 & 0xFFFF, SIGNISSET(f1), BASEF16(f1), FRACTIONF16(f1));
+
+    //TODO: check negative values (always abs?)
+    //sub 
+    printf("-----------[SUB]-----------\n");
+    a1 = 15000; //1.5
+    a2 = 28938; //2.875
+    f1 = subF16(intToF16(a1), intToF16(a2)); //4.375
+    printf("%d - %d\n", a1, a2);
+    printf("I32Conv: %12d, F16: %04X, sign: %1X, base: %4X, frac: %1X\n\n", f16ToInt(f1), f1 & 0xFFFF, SIGNISSET(f1), BASEF16(f1), FRACTIONF16(f1));
+    //sub minus
+    a1 = 7500;
+    a2 = -7500;
+    //f1 = subF16(intToF16(a1), intToF16(a2));
+    printf("%d - %d\n", a1, a2);
+    printf("I32Conv: %12d, F16: %04X, sign: %1X, base: %4X, frac: %1X\n\n", f16ToInt(f1), f1 & 0xFFFF, SIGNISSET(f1), BASEF16(f1), FRACTIONF16(f1));
+
+    return 0;
+}
