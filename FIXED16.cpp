@@ -73,6 +73,77 @@ INT16 factorialInt16(INT16 x)
     return ret;
 }
 
+//do not copy in GBDK (execute calculations here first)
+int f16ToInt(fixed16 x)
+{
+    if (x == 0) return 0;
+    int ret;
+    UINT8 frac = x & fractionMaskF16;
+    //base calculation
+    ret = BASEF16TOINT(x);
+
+    //fraction calculation
+    INT16 fracValue;
+    char loopLowBits;
+
+    for (loopLowBits = 1; loopLowBits <= lowBits; loopLowBits++)
+    {
+        fracValue = 0;
+        if (((frac >> (lowBits - loopLowBits)) & 0x01) > 0) fracValue = intMultiplier / powInt16(2, loopLowBits);
+        ret += fracValue;
+    }
+
+    return ret;
+}
+
+fixed16 intToF16(int x)
+{
+    if (x == 0) return 0x0000;
+
+    BOOL sign = SIGNISSET(x); //is negative?
+
+    //base calculation
+    INT16 base = 0;
+    base = ((x / intMultiplier) << lowBits);
+
+    //fraction calculation
+    INT16 fracValue = 0;
+    UINT8 frac = 0;
+    fracValue = (x - ((base >> lowBits) * intMultiplier));
+
+    INT16 lowBitMultiplier;
+    char loopLowBits;
+
+    if (sign)
+    {
+        for (loopLowBits = 1; loopLowBits <= lowBits && fracValue < 0; loopLowBits++)
+        {
+            lowBitMultiplier = intMultiplier / powInt16(2, loopLowBits);
+            if (fracValue + lowBitMultiplier <= 0)
+            {
+                fracValue += lowBitMultiplier;
+                frac |= (0x01 << (lowBits - loopLowBits));
+            }
+        }
+
+        return base - (frac & fractionMaskF16);
+    }
+    else
+    {
+        for (loopLowBits = 1; loopLowBits <= lowBits && fracValue > 0; loopLowBits++)
+        {
+            lowBitMultiplier = intMultiplier / powInt16(2, loopLowBits);
+            if (fracValue - lowBitMultiplier >= 0)
+            {
+                fracValue -= lowBitMultiplier;
+                frac |= (0x01 << (lowBits - loopLowBits));
+            }
+        }
+
+        return base + (frac & fractionMaskF16);
+    }
+}
+
 //fixed16 operators
 fixed16 absF16(fixed16 x)
 {
@@ -124,76 +195,26 @@ fixed16 ceilF16(fixed16 x)
     return (x & (fullMaskF16 - fractionMaskF16)) + (0x0001 << lowBits);
 }
 
-//do not copy in GBDK (execute calculations here first)
-int f16ToInt(fixed16 x)
-{
-    if (x == 0) return 0;
-    int ret;
-    UINT8 frac = x & fractionMaskF16;
-    //base calculation
-    ret = BASEF16TOINT(x);
+fixed16 sinF16(fixed16 x) {
+    fixed16 res = 0;
+    fixed16 term = x;
+    int k = 1;
 
-    //fraction calculation
-    INT16 fracValue;
-    char loopLowBits;
-
-    for (loopLowBits = 1; loopLowBits <= lowBits; loopLowBits++)
-    {
-        fracValue = 0;
-        if (((frac >> (lowBits - loopLowBits)) & 0x01) > 0) fracValue = intMultiplier / powInt16(2, loopLowBits);
-        ret += fracValue;
+    while (addF16(res, term) != res) {
+        res = addF16(res, term);
+        k = k + 2;
+        //term = divF16(divF16(mulF16(mulF16(term, -x), x), k), INT16TOF16(k - 1));
+        term = mulF16(term, -x);
+        term = mulF16(term, x);
+        term = divF16(term, INT16TOF16(k));
+        term = divF16(term, INT16TOF16(k - 1));
+        printf("%d, %d, %d\n", f16ToInt(res), k, f16ToInt(term));
     }
 
-    return ret;
+    return res;
 }
 
-fixed16 intToF16(int x)
-{
-    if (x == 0) return 0x0000;
 
-    BOOL sign = SIGNISSET(x); //is negative?
-    
-    //base calculation
-    INT16 base = 0;
-    base = ((x / intMultiplier) << lowBits);
-
-    //fraction calculation
-    INT16 fracValue = 0;
-    UINT8 frac = 0;
-    fracValue = (x - ((base >> lowBits) * intMultiplier));
-
-    INT16 lowBitMultiplier;
-    char loopLowBits;
-
-    if (sign)
-    {
-        for (loopLowBits = 1; loopLowBits <= lowBits && fracValue < 0; loopLowBits++)
-        {
-            lowBitMultiplier = intMultiplier / powInt16(2, loopLowBits);
-            if (fracValue + lowBitMultiplier <= 0)
-            { 
-                fracValue += lowBitMultiplier;
-                frac |= (0x01 << (lowBits - loopLowBits));
-            }
-        }
-
-        return base - (frac & fractionMaskF16);
-    }
-    else
-    {
-        for (loopLowBits = 1; loopLowBits <= lowBits && fracValue > 0; loopLowBits++)
-        {
-            lowBitMultiplier = intMultiplier / powInt16(2, loopLowBits);
-            if (fracValue - lowBitMultiplier >= 0) 
-            { 
-                fracValue -= lowBitMultiplier;
-                frac |= (0x01 << (lowBits - loopLowBits));
-            }
-        }
-
-        return base + (frac & fractionMaskF16);
-    }
-}
 
 
 void fixed16_12Dot4();
@@ -355,6 +376,31 @@ void fixed16_12Dot4()
     f1 = divF16(intToF16(a1), intToF16(a2));
     printf("%d / %d\n", a1, a2);
     printf("I32Conv: %12d, F16: %04X, sign: %1X, base: %4X, frac: %1X\n\n", f16ToInt(f1), f1 & 0xFFFF, SIGNISSET(f1), BASEF16(f1), FRACTIONF16(f1));
+
+    //sin
+    printf("-----------[SIN]-----------\n");
+    a1 = 10000;
+    f1 = sinF16(intToF16(a1));
+    printf("SIN %d\n", a1);
+    printf("I32Conv: %12d, F16: %04X, sign: %1X, base: %4X, frac: %1X\n\n", f16ToInt(f1), f1 & 0xFFFF, SIGNISSET(f1), BASEF16(f1), FRACTIONF16(f1));
+    
+    a1 = 5000;
+    f1 = sinF16(intToF16(a1));
+    printf("SIN %d\n", a1);
+    printf("I32Conv: %12d, F16: %04X, sign: %1X, base: %4X, frac: %1X\n\n", f16ToInt(f1), f1 & 0xFFFF, SIGNISSET(f1), BASEF16(f1), FRACTIONF16(f1));
+    a1 = 20000;
+    f1 = sinF16(intToF16(a1));
+    printf("SIN %d\n", a1);
+    printf("I32Conv: %12d, F16: %04X, sign: %1X, base: %4X, frac: %1X\n\n", f16ToInt(f1), f1 & 0xFFFF, SIGNISSET(f1), BASEF16(f1), FRACTIONF16(f1));
+    a1 = -5000;
+    f1 = sinF16(intToF16(a1));
+    printf("SIN %d\n", a1);
+    printf("I32Conv: %12d, F16: %04X, sign: %1X, base: %4X, frac: %1X\n\n", f16ToInt(f1), f1 & 0xFFFF, SIGNISSET(f1), BASEF16(f1), FRACTIONF16(f1));
+
+    return;
+
+    //cos
+    printf("-----------[COS]-----------\n");
 
     //pi
     printf("-----------[RAND]-----------\n");
