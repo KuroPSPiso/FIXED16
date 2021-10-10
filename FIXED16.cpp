@@ -43,12 +43,14 @@ const fixed16 baseMaskF16 = (-1 ^ fractionMaskF16); //includes sign
 #define BASEF16(x) (x & baseMaskF16)
 #define FRACTIONF16(x) (x & fractionMaskF16)
 #define PI 0x0032
+#define INT16TOF16(x) (x << lowBits) //quick standard int16 to fixed16 (intended for factorial calculations)
+#define F16TOINT16(x) (x >> lowBits) //quick standard int16 to fixed16 (intended for factorial calculations)
 
 //define macros do not copy in GBDK
 #define BASEF16TOINT(x) ((BASEF16(x) >> lowBits) * intMultiplier) 
 
 //int16 operators (TODO: works on fixed16 too)
-INT16 int16Power(INT16 base, UINT8 exp)
+INT16 powInt16(INT16 base, UINT8 exp)
 {
     if (exp == 0) return 1;
     if (exp == 1) return base;
@@ -57,6 +59,17 @@ INT16 int16Power(INT16 base, UINT8 exp)
     {
         ret *= base;
     }
+    return ret;
+}
+
+INT16 factorialInt16(INT16 x)
+{
+    INT16 ret = x;
+    for (; x > 1;)
+    {
+        ret *= --x;
+    }
+
     return ret;
 }
 
@@ -127,7 +140,7 @@ int f16ToInt(fixed16 x)
     for (loopLowBits = 1; loopLowBits <= lowBits; loopLowBits++)
     {
         fracValue = 0;
-        if (((frac >> (lowBits - loopLowBits)) & 0x01) > 0) fracValue = intMultiplier / int16Power(2, loopLowBits);
+        if (((frac >> (lowBits - loopLowBits)) & 0x01) > 0) fracValue = intMultiplier / powInt16(2, loopLowBits);
         ret += fracValue;
     }
 
@@ -156,7 +169,7 @@ fixed16 intToF16(int x)
     {
         for (loopLowBits = 1; loopLowBits <= lowBits && fracValue < 0; loopLowBits++)
         {
-            lowBitMultiplier = intMultiplier / int16Power(2, loopLowBits);
+            lowBitMultiplier = intMultiplier / powInt16(2, loopLowBits);
             if (fracValue + lowBitMultiplier <= 0)
             { 
                 fracValue += lowBitMultiplier;
@@ -170,7 +183,7 @@ fixed16 intToF16(int x)
     {
         for (loopLowBits = 1; loopLowBits <= lowBits && fracValue > 0; loopLowBits++)
         {
-            lowBitMultiplier = intMultiplier / int16Power(2, loopLowBits);
+            lowBitMultiplier = intMultiplier / powInt16(2, loopLowBits);
             if (fracValue - lowBitMultiplier >= 0) 
             { 
                 fracValue -= lowBitMultiplier;
@@ -188,6 +201,16 @@ void fixed16_12Dot4();
 int main()
 {
     fixed16_12Dot4();
+
+    printf("-----------[int16]-----------\n");
+    printf("Power 2^2 = %d\n", powInt16(2, 2));
+    printf("Power 4^4 = %d\n", powInt16(4, 4));
+    printf("Power 3^8 = %d\n\n", powInt16(3, 8));
+
+    printf("FACT 4 = %d\n", factorialInt16(4));
+    printf("FACT 7 = %d\n", factorialInt16(7));
+    printf("FACT 1 = %d\n", factorialInt16(1));
+    printf("FACT 0 = %d\n\n", factorialInt16(0));
 
     return 0;
 }
@@ -347,4 +370,5 @@ void fixed16_12Dot4()
     f2 = ceilF16(f1);
     printf("CEIL PI\n");
     printf("I32Conv: %12d, F16: %04X, sign: %1X, base: %4X, frac: %1X\n\n", f16ToInt(f2), f2 & 0xFFFF, SIGNISSET(f2), BASEF16(f2), FRACTIONF16(f2));
+
 }
