@@ -1,85 +1,13 @@
-﻿  fixed16.c
-C:\Users\bogaa\source\repos\FIXED16\fixed16.c(13,15): error C2061: syntax error: identifier 'fixed16'
-C:\Users\bogaa\source\repos\FIXED16\fixed16.c(13,15): error C2059: syntax error: ';'
-C:\Users\bogaa\source\repos\FIXED16\fixed16.c(14,15): error C2061: syntax error: identifier 'fractionMaskF16'
-C:\Users\bogaa\source\repos\FIXED16\fixed16.c(14,15): error C2059: syntax error: ';'
-C:\Users\bogaa\source\repos\FIXED16\fixed16.c(14,31): error C2513: ' ': no variable declared before '='
-C:\Users\bogaa\source\repos\FIXED16\fixed16.c(15,15): error C2061: syntax error: identifier 'baseMaskF16'
-C:\Users\bogaa\source\repos\FIXED16\fixed16.c(15,15): error C2059: syntax error: ';'
-C:\Users\bogaa\source\repos\FIXED16\fixed16.c(15,27): error C2513: ' ': no variable declared before '='
-C:\Users\bogaa\source\repos\FIXED16\fixed16.c(28,9): error C2061: syntax error: identifier 'absF16'
-C:\Users\bogaa\source\repos\FIXED16\fixed16.c(28,9): error C2059: syntax error: ';'
-C:\Users\bogaa\source\repos\FIXED16\fixed16.c(28,24): error C2146: syntax error: missing ')' before identifier 'x'
-C:\Users\bogaa\source\repos\FIXED16\fixed16.c(28,24): error C2061: syntax error: identifier 'x'
-C:\Users\bogaa\source\repos\FIXED16\fixed16.c(28,25): error C2059: syntax error: ')'
-C:\Users\bogaa\source\repos\FIXED16\fixed16.c(29,1): error C2449: found '{' at file scope (missing function header?)
-C:\Users\bogaa\source\repos\FIXED16\fixed16.c(32,1): error C2059: syntax error: '}'
-C:\Users\bogaa\source\repos\FIXED16\fixed16.c(39,9): error C2061: syntax error: identifier 'subF16'
-C:\Users\bogaa\source\repos\FIXED16\fixed16.c(39,9): error C2059: syntax error: ';'
-C:\Users\bogaa\source\repos\FIXED16\fixed16.c(39,24): error C2146: syntax error: missing ')' before identifier 'x'
-C:\Users\bogaa\source\repos\FIXED16\fixed16.c(39,24): error C2061: syntax error: identifier 'x'
-C:\Users\bogaa\source\repos\FIXED16\fixed16.c(39,25): error C2059: syntax error: ','
-C:\Users\bogaa\source\repos\FIXED16\fixed16.c(39,38): error C2059: syntax error: ')'
-C:\Users\bogaa\source\repos\FIXED16\fixed16.c(44,9): error C2061: syntax error: identifier 'mulF16'
-C:\Users\bogaa\source\repos\FIXED16\fixed16.c(44,9): error C2059: syntax error: ';'
-C:\Users\bogaa\source\repos\FIXED16\fixed16.c(44,24): error C2146: syntax error: missing ')' before identifier 'x'
-C:\Users\bogaa\source\repos\FIXED16\fixed16.c(44,24): error C2061: syntax error: identifier 'x'
-C:\Users\bogaa\source\repos\FIXED16\fixed16.c(44,25): error C2059: syntax error: ','
-C:\Users\bogaa\source\repos\FIXED16\fixed16.c(44,38): error C2059: syntax error: ')'
-C:\Users\bogaa\source\repos\FIXED16\fixed16.c(60,9): error C2061: syntax error: identifier 'divF16'
-C:\Users\bogaa\source\repos\FIXED16\fixed16.c(60,9): error C2059: syntax error: ';'
-C:\Users\bogaa\source\repos\FIXED16\fixed16.c(60,24): error C2146: syntax error: missing ')' before identifier 'x'
-C:\Users\bogaa\source\repos\FIXED16\fixed16.c(60,24): error C2061: syntax error: identifier 'x'
-C:\Users\bogaa\source\repos\FIXED16\fixed16.c(60,25): error C2059: syntax error: ','
-C:\Users\bogaa\source\repos\FIXED16\fixed16.c(60,38): error C2059: syntax error: ')'
-C:\Users\bogaa\source\repos\FIXED16\fixed16.c(66,9): error C2061: syntax error: identifier 'floorF16'
-C:\Users\bogaa\source\repos\FIXED16\fixed16.c(66,9): error C2059: syntax error: ';'
-C:\Users\bogaa\source\repos\FIXED16\fixed16.c(66,26): error C2146: syntax error: missing ')' before identifier 'x'
-C:\Users\bogaa\source\repos\FIXED16\fixed16.c(66,26): error C2061: syntax error: identifier 'x'
-C:\Users\bogaa\source\repos\FIXED16\fixed16.c(66,27): error C2059: syntax error: ')'
-C:\Users\bogaa\source\repos\FIXED16\fixed16.c(67,1): error C2449: found '{' at file scope (missing function header?)
-C:\Users\bogaa\source\repos\FIXED16\fixed16.c(69,1): error C2059: syntax error: '}'
-C:\Users\bogaa\source\repos\FIXED16\fixed16.c(78,9): error C2061: syntax error: identifier 'sinF16'
-C:\Users\bogaa\source\repos\FIXED16\fixed16.c(78,9): error C2059: syntax error: ';'
-C:\Users\bogaa\source\repos\FIXED16\fixed16.c(78,24): error C2146: syntax error: missing ')' before identifier 'x'
-C:\Users\bogaa\source\repos\FIXED16\fixed16.c(78,24): error C2061: syntax error: identifier 'x'
-C:\Users\bogaa\source\repos\FIXED16\fixed16.c(78,25): error C2059: syntax error: ')'
-C:\Users\bogaa\source\repos\FIXED16\fixed16.c(78,27): error C2449: found '{' at file scope (missing function header?)
-C:\Users\bogaa\source\repos\FIXED16\fixed16.c(94,1): error C2059: syntax error: '}'
-  fixed16_min.c
-C:\Users\bogaa\source\repos\FIXED16\fixed16_min.c(8,15): error C2061: syntax error: identifier 'fixed16'
-C:\Users\bogaa\source\repos\FIXED16\fixed16_min.c(8,15): error C2059: syntax error: ';'
-C:\Users\bogaa\source\repos\FIXED16\fixed16_min.c(9,15): error C2061: syntax error: identifier 'fractionMaskF16'
-C:\Users\bogaa\source\repos\FIXED16\fixed16_min.c(9,15): error C2059: syntax error: ';'
-C:\Users\bogaa\source\repos\FIXED16\fixed16_min.c(9,31): error C2513: ' ': no variable declared before '='
-C:\Users\bogaa\source\repos\FIXED16\fixed16_min.c(10,15): error C2061: syntax error: identifier 'baseMaskF16'
-C:\Users\bogaa\source\repos\FIXED16\fixed16_min.c(10,15): error C2059: syntax error: ';'
-C:\Users\bogaa\source\repos\FIXED16\fixed16_min.c(10,27): error C2513: ' ': no variable declared before '='
-C:\Users\bogaa\source\repos\FIXED16\fixed16_min.c(22,9): error C2061: syntax error: identifier 'absF16'
-C:\Users\bogaa\source\repos\FIXED16\fixed16_min.c(22,9): error C2059: syntax error: ';'
-C:\Users\bogaa\source\repos\FIXED16\fixed16_min.c(22,24): error C2146: syntax error: missing ')' before identifier 'x'
-C:\Users\bogaa\source\repos\FIXED16\fixed16_min.c(22,24): error C2061: syntax error: identifier 'x'
-C:\Users\bogaa\source\repos\FIXED16\fixed16_min.c(22,25): error C2059: syntax error: ')'
-C:\Users\bogaa\source\repos\FIXED16\fixed16_min.c(23,1): error C2449: found '{' at file scope (missing function header?)
-C:\Users\bogaa\source\repos\FIXED16\fixed16_min.c(26,1): error C2059: syntax error: '}'
-C:\Users\bogaa\source\repos\FIXED16\fixed16_min.c(41,9): error C2061: syntax error: identifier 'divF16'
-C:\Users\bogaa\source\repos\FIXED16\fixed16_min.c(41,9): error C2059: syntax error: ';'
-C:\Users\bogaa\source\repos\FIXED16\fixed16_min.c(41,24): error C2146: syntax error: missing ')' before identifier 'x'
-C:\Users\bogaa\source\repos\FIXED16\fixed16_min.c(41,24): error C2061: syntax error: identifier 'x'
-C:\Users\bogaa\source\repos\FIXED16\fixed16_min.c(41,25): error C2059: syntax error: ','
-C:\Users\bogaa\source\repos\FIXED16\fixed16_min.c(41,38): error C2059: syntax error: ')'
-C:\Users\bogaa\source\repos\FIXED16\fixed16_min.c(47,9): error C2061: syntax error: identifier 'floorF16'
-C:\Users\bogaa\source\repos\FIXED16\fixed16_min.c(47,9): error C2059: syntax error: ';'
-C:\Users\bogaa\source\repos\FIXED16\fixed16_min.c(47,26): error C2146: syntax error: missing ')' before identifier 'x'
-C:\Users\bogaa\source\repos\FIXED16\fixed16_min.c(47,26): error C2061: syntax error: identifier 'x'
-C:\Users\bogaa\source\repos\FIXED16\fixed16_min.c(47,27): error C2059: syntax error: ')'
-C:\Users\bogaa\source\repos\FIXED16\fixed16_min.c(48,1): error C2449: found '{' at file scope (missing function header?)
-C:\Users\bogaa\source\repos\FIXED16\fixed16_min.c(50,1): error C2059: syntax error: '}'
-C:\Users\bogaa\source\repos\FIXED16\fixed16_min.c(59,9): error C2061: syntax error: identifier 'sinF16'
-C:\Users\bogaa\source\repos\FIXED16\fixed16_min.c(59,9): error C2059: syntax error: ';'
-C:\Users\bogaa\source\repos\FIXED16\fixed16_min.c(59,24): error C2146: syntax error: missing ')' before identifier 'x'
-C:\Users\bogaa\source\repos\FIXED16\fixed16_min.c(59,24): error C2061: syntax error: identifier 'x'
-C:\Users\bogaa\source\repos\FIXED16\fixed16_min.c(59,25): error C2059: syntax error: ')'
-C:\Users\bogaa\source\repos\FIXED16\fixed16_min.c(59,27): error C2449: found '{' at file scope (missing function header?)
-C:\Users\bogaa\source\repos\FIXED16\fixed16_min.c(74,1): error C2059: syntax error: '}'
-  Generating Code...
+﻿  FIXED16.cpp
+C:\Users\bogaa\source\repos\FIXED16\FIXED16.cpp(34,29): warning C4309: 'initializing': truncation of constant value
+C:\Users\bogaa\source\repos\FIXED16\FIXED16.cpp(36,29): warning C4309: 'initializing': truncation of constant value
+C:\Users\bogaa\source\repos\FIXED16\FIXED16.cpp(210,29): warning C4554: '<<': check operator precedence for possible error; use parentheses to clarify precedence
+C:\Users\bogaa\source\repos\FIXED16\FIXED16.cpp(230,29): warning C4554: '<<': check operator precedence for possible error; use parentheses to clarify precedence
+C:\Users\bogaa\source\repos\FIXED16\FIXED16.cpp(260,10): warning C4244: '=': conversion from 'double' to 'fixed16', possible loss of data
+C:\Users\bogaa\source\repos\FIXED16\FIXED16.cpp(262,10): warning C4244: '=': conversion from 'double' to 'fixed16', possible loss of data
+C:\Users\bogaa\source\repos\FIXED16\FIXED16.cpp(264,10): warning C4244: '=': conversion from 'double' to 'fixed16', possible loss of data
+C:\Users\bogaa\source\repos\FIXED16\FIXED16.cpp(266,10): warning C4244: '=': conversion from 'double' to 'fixed16', possible loss of data
+C:\Users\bogaa\source\repos\FIXED16\FIXED16.cpp(268,10): warning C4244: '=': conversion from 'double' to 'fixed16', possible loss of data
+C:\Users\bogaa\source\repos\FIXED16\FIXED16.cpp(270,10): warning C4244: '=': conversion from 'double' to 'fixed16', possible loss of data
+C:\Users\bogaa\source\repos\FIXED16\FIXED16.cpp(272,10): warning C4244: '=': conversion from 'double' to 'fixed16', possible loss of data
+  FIXED16.vcxproj -> C:\Users\bogaa\source\repos\FIXED16\Debug\FIXED16.exe
